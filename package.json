@@ -1,0 +1,27 @@
+{
+  "name": "sheet-manager",
+  "version": "1.0.0",
+  "description": "WhatsApp-connected Todo List Manager powered by OpenClaw + Gemini AI + Google Sheets",
+  "main": "agent/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node agent/index.js",
+    "dashboard": "node dashboard/server.js",
+    "setup": "node scripts/setup.js",
+    "dev": "concurrently \"npm run start\" \"npm run dashboard\""
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "googleapis": "^144.0.0",
+    "whatsapp-web.js": "^1.26.0",
+    "qrcode-terminal": "^0.12.0",
+    "express": "^4.21.0",
+    "dotenv": "^16.4.7",
+    "concurrently": "^9.1.0",
+    "ws": "^8.18.0",
+    "chalk": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

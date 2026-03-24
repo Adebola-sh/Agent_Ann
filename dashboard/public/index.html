@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sheet Manager Dashboard - Monitor your WhatsApp-connected todo list bot powered by Gemini AI and Google Sheets">
+  <title>Sheet Manager | Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
+</head>
+<body>
+
+  <!-- Floating Particles -->
+  <div class="particles" id="particles"></div>
+
+  <div class="app">
+    <!-- Header -->
+    <header class="header" id="header">
+      <div class="header-left">
+        <div class="logo">📋</div>
+        <div class="header-title">
+          <h1>Sheet Manager</h1>
+          <p>WhatsApp + Gemini AI + Google Sheets</p>
+        </div>
+      </div>
+      <div class="status-badge disconnected" id="statusBadge">
+        <span class="status-dot"></span>
+        <span id="statusText">Disconnected</span>
+      </div>
+    </header>
+
+    <!-- Stats Grid -->
+    <section class="stats-grid" id="statsGrid">
+      <div class="stat-card gold">
+        <div class="stat-icon">📨</div>
+        <div class="stat-value" id="statMessages">0</div>
+        <div class="stat-label">Messages Processed</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon">📋</div>
+        <div class="stat-value" id="statActive">0</div>
+        <div class="stat-label">Active Todos</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value" id="statCompleted">0</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-value" id="statUptime">0m</div>
+        <div class="stat-label">Uptime</div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="content-grid">
+      <!-- Activity Feed -->
+      <div class="card">
+        <div class="card-header">
+          <h2>📡 Live Activity</h2>
+          <span class="badge" id="activityCount">0 events</span>
+        </div>
+        <div class="card-body" id="activityFeed">
+          <div class="empty-state">
+            <div class="empty-icon">🔇</div>
+            <p>No activity yet. Send a WhatsApp message to get started!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Connection / QR Code -->
+      <div class="card" id="connectionCard">
+        <div class="card-header">
+          <h2>📱 WhatsApp Connection</h2>
+        </div>
+        <div class="card-body">
+          <div class="qr-section" id="qrSection">
+            <div style="font-size: 48px; margin-bottom: 16px;">📱</div>
+            <h3 style="margin-bottom: 8px;">Waiting for Connection</h3>
+            <p class="qr-instructions">
+              Start the agent with <strong>npm start</strong> to display the QR code.
+              Then scan it with your WhatsApp app.
+            </p>
+          </div>
+          <div class="connection-info" id="connectionInfo" style="display: none;">
+            <div class="info-row">
+              <span class="info-label">Name</span>
+              <span class="info-value" id="infoName">—</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Number</span>
+              <span class="info-value" id="infoNumber">—</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Platform</span>
+              <span class="info-value" id="infoPlatform">—</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Connected Since</span>
+              <span class="info-value" id="infoConnectedSince">—</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">AI Model</span>
+              <span class="info-value">Gemini 2.0 Flash</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Commands Reference -->
+      <div class="card full-width">
+        <div class="card-header">
+          <h2>💬 Available Commands</h2>
+          <span class="badge">Natural Language</span>
+        </div>
+        <div class="card-body">
+          <ul class="commands-list">
+            <li>
+              <span class="command-emoji">➕</span>
+              <div class="command-text">
+                <strong>"Add buy groceries to my list"</strong>
+                <span>Creates a new todo item. You can include priority and category.</span>
+              </div>
+            </li>
+            <li>
+              <span class="command-emoji">📋</span>
+              <div class="command-text">
+                <strong>"Show my todos" / "What's on my list?"</strong>
+                <span>Lists all active todo items with priorities.</span>
+              </div>
+            </li>
+            <li>
+              <span class="command-emoji">✅</span>
+              <div class="command-text">
+                <strong>"Done with groceries" / "Mark groceries as complete"</strong>
+                <span>Completes a task and moves it to the Completed sheet.</span>
+              </div>
+            </li>
+            <li>
+              <span class="command-emoji">🗑️</span>
+              <div class="command-text">
+                <strong>"Delete groceries from my list"</strong>
+                <span>Permanently removes a task from your list.</span>
+              </div>
+            </li>
+            <li>
+              <span class="command-emoji">✏️</span>
+              <div class="command-text">
+                <strong>"Change groceries priority to high"</strong>
+                <span>Updates task properties like priority, category, or due date.</span>
+              </div>
+            </li>
+            <li>
+              <span class="command-emoji">📊</span>
+              <div class="command-text">
+                <strong>"Give me a summary" / "How am I doing?"</strong>
+                <span>Shows overview with counts by priority and category.</span>
+              </div>
+            </li>
+            <li>
+              <span class="command-emoji">📄</span>
+              <div class="command-text">
+                <strong>"Create a new sheet called Work Tasks"</strong>
+                <span>Creates a new tab/sheet in your spreadsheet.</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

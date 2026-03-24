@@ -1,0 +1,35 @@
+node_modules/
+
+.env
+credentials.json
+
+
+.wwebjs_auth/
+.wwebjs_cache/
+
+Abd_github/
+
+
+__pycache__/
+*.py[oc]
+.venv/
+Agenv/
+build/
+dist/
+wheels/
+*.egg-info
+
+# ── OS junk ──
+.DS_Store
+Thumbs.db
+
+# ── Editor / IDE ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Logs ──
+*.log
+npm-debug.log*
