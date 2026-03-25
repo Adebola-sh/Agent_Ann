@@ -16,10 +16,10 @@ config();
 console.log(`
 ╔══════════════════════════════════════════════════╗
 ║                                                  ║
-║   📋  S H E E T   M A N A G E R  📋             ║
+║   🤖  A N N  -  A I   A S S I S T A N T  🤖     ║
 ║                                                  ║
 ║   WhatsApp + Gemini AI + Google Sheets           ║
-║   Todo List Management Bot                       ║
+║   Your Versatile AI Assistant                    ║
 ║                                                  ║
 ╚══════════════════════════════════════════════════╝
 `);
@@ -134,11 +134,17 @@ async function main() {
     await whatsapp.initialize();
   } catch (error) {
     console.error('\n💥 Failed to start Sheet Manager:', error.message);
-    console.error('\n📖 Troubleshooting:');
-    console.error('   1. Check your .env file has all required keys');
-    console.error('   2. Ensure credentials.json exists for Google Sheets');
-    console.error('   3. Make sure you have a stable internet connection');
-    console.error('   4. Run "npm run setup" for guided configuration\n');
+    // Print the full error details for debugging
+    if (error.response) {
+      console.error('\n🔍 Full API Error Details:');
+      console.error('   Status:', error.response.status);
+      console.error('   Status Text:', error.response.statusText);
+      console.error('   Data:', JSON.stringify(error.response.data, null, 2));
+    }
+    if (error.errors) {
+      console.error('\n🔍 Error details:', JSON.stringify(error.errors, null, 2));
+    }
+    console.error('\n🔍 Full stack trace:', error.stack);
     process.exit(1);
   }
 }

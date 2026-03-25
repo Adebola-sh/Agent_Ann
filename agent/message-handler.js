@@ -33,7 +33,7 @@ class MessageHandler {
     }
 
     // Skip group messages unless bot is mentioned (optional behavior)
-    const botName = process.env.BOT_NAME || 'SheetBot';
+    const botName = process.env.BOT_NAME || 'Ann';
     if (isGroup && !body.toLowerCase().includes(botName.toLowerCase())) {
       return;
     }
@@ -41,26 +41,35 @@ class MessageHandler {
     this.messageCount++;
 
     try {
-      // Get current todos for context
-      let todosContext = '';
-      try {
-        const summary = await this.sheets.getSummary();
-        todosContext = JSON.stringify({
-          active: summary.totalActive,
-          completed: summary.totalCompleted,
-          todos: summary.todos.map((t) => `${t.task} [${t.priority}]`),
-        });
-      } catch (err) {
-        // Sheets might not be ready yet
-        todosContext = '';
-      }
+      // First pass: Send to Gemini without heavy sheets context
+      // This makes general conversation fast and avoids Sheets errors
+      let aiResponse = await this.gemini.processMessage(from, body);
 
-      // Process with Gemini AI
-      const aiResponse = await this.gemini.processMessage(
-        from,
-        body,
-        todosContext
-      );
+      // If the AI determined this is a spreadsheet action, re-process with todos context
+      const sheetActions = [
+        'add_todo', 'list_todos', 'complete_todo',
+        'delete_todo', 'update_todo', 'get_summary', 'create_sheet',
+      ];
+
+      if (sheetActions.includes(aiResponse.action)) {
+        let todosContext = '';
+        try {
+          const summary = await this.sheets.getSummary();
+          todosContext = JSON.stringify({
+            active: summary.totalActive,
+            completed: summary.totalCompleted,
+            todos: summary.todos.map((t) => `${t.task} [${t.priority}]`),
+          });
+        } catch (err) {
+          // Sheets might not be ready yet — proceed without context
+          todosContext = '';
+        }
+
+        // Re-process with context if we have it (for better action accuracy)
+        if (todosContext) {
+          aiResponse = await this.gemini.processMessage(from, body, todosContext);
+        }
+      }
 
       // Execute the determined action
       const result = await this.executeAction(aiResponse, from);

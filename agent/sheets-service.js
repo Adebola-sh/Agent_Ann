@@ -50,7 +50,7 @@ class SheetsService {
       credentials,
       scopes: [
         'https://www.googleapis.com/auth/spreadsheets',
-        'https://www.googleapis.com/auth/drive.file',
+        'https://www.googleapis.com/auth/drive',
       ],
     });
 
@@ -60,26 +60,7 @@ class SheetsService {
 
     // Create default spreadsheet if none exists
     if (!this.spreadsheetId) {
-      try {
-        await this.createDefaultSpreadsheet();
-      } catch (error) {
-        const msg = error.message || '';
-        if (msg.includes('permission') || msg.includes('forbidden') || msg.includes('403') || msg.includes('not been used') || msg.includes('disabled')) {
-          const projectId = credentials.project_id || 'YOUR_PROJECT_ID';
-          throw new Error(
-            `❌ Google API permission denied!\n\n` +
-            `   Your service account credentials are valid, but the required APIs\n` +
-            `   are not enabled in your Google Cloud project.\n\n` +
-            `   👉 Fix: Enable BOTH of these APIs in your Google Cloud Console:\n\n` +
-            `   1. Google Sheets API:\n` +
-            `      https://console.cloud.google.com/apis/library/sheets.googleapis.com?project=${projectId}\n\n` +
-            `   2. Google Drive API:\n` +
-            `      https://console.cloud.google.com/apis/library/drive.googleapis.com?project=${projectId}\n\n` +
-            `   After enabling both, wait ~30 seconds and run "npm start" again.\n`
-          );
-        }
-        throw error; // Re-throw if it's a different error
-      }
+      await this.createDefaultSpreadsheet();
     }
 
     console.log('✅ Google Sheets service initialized');
