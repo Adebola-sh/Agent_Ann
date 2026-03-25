@@ -1,5 +1,5 @@
 // ============================================
-// Sheet Manager - Dashboard Server
+// Ann AI Assistant - Dashboard Server
 // ============================================
 // Express server serving the monitoring dashboard
 
